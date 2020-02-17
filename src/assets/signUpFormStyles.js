@@ -8,4 +8,4 @@ const signUpFormStyles = theme => ({
     }
 });
 
-export default signUpFormStyles
+export default signUpFormStyles;

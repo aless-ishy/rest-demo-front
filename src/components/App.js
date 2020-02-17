@@ -7,12 +7,20 @@ import Header from "./Header";
 import StoreList from "./StoreList";
 import StoreSignUp from "./StoreSignUp";
 import FileUploader from "./FileUploader";
+import ReviewList from "./ReviewList";
+import ReviewForm from "./ReviewForm";
 
 function App() {
   return (<Router>
           <div>
               <Header/>
               <Switch>
+                  <Route path="/addreview">
+                      <ReviewForm/>
+                  </Route>
+                  <Route path="/reviews">
+                      <ReviewList/>
+                  </Route>
                   <Route path="/files">
                       <FileUploader/>
                   </Route>
