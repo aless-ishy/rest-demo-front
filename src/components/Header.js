@@ -10,13 +10,17 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import DeviceHubSharpIcon from '@material-ui/icons/DeviceHubSharp';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import AddCircleOutlineSharpIcon from '@material-ui/icons/AddCircleOutlineSharp';
-import RemoveCircleOutlineSharpIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import StoreIcon from '@material-ui/icons/Store';
 import PropTypes from "prop-types";
 import headerStyles from "../assets/headerStyles";
 import LinkMenuItems from "./LinkMenuItems";
+import DescriptionIcon from '@material-ui/icons/Description';
+
+const reviewMenuItems = [
+    {link: "/reviews", label: "Reviews"},
+    {link: "/addreview", label: "Adicionar Review"}
+];
 
 const profileMenuItems = [
     {link: "/", label: "Usuários"},
@@ -34,9 +38,11 @@ class Header extends React.Component {
             anchorProfileEl: null,
             mobileMoreAnchorEl: null,
             anchorStoreEl: null,
+            anchorReviewEl: null,
             isProfileMenuOpen: false,
             isMobileMenuOpen: false,
-            isStoreMenuOpen: false
+            isStoreMenuOpen: false,
+            isReviewMenuOpen: false
         };
 
         this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
@@ -47,11 +53,23 @@ class Header extends React.Component {
 
         this.handleMobileMenuClose = this.handleMobileMenuClose.bind(this);
         this.handleMobileMenuOpen = this.handleMobileMenuOpen.bind(this);
+
+        this.handleReviewMenuOpen = this.handleReviewMenuOpen.bind(this);
+        this.handleReviewMenuClose = this.handleReviewMenuClose.bind(this);
     }
 
     get value() {
         return parseInt(document.getElementById("nodeValue").value)
     }
+
+    handleReviewMenuOpen(event) {
+        this.setState({anchorReviewEl: event.currentTarget, isReviewMenuOpen: true});
+    };
+
+    handleReviewMenuClose() {
+        this.setState({anchorReviewEl: null, isReviewMenuOpen: false});
+        this.handleMobileMenuClose();
+    };
 
     handleProfileMenuOpen(event) {
         this.setState({anchorProfileEl: event.currentTarget, isProfileMenuOpen: true});
@@ -94,6 +112,21 @@ class Header extends React.Component {
                 onClose={this.handleProfileMenuClose}
             >
                 <LinkMenuItems items={profileMenuItems}/>
+            </Menu>
+        );
+
+        const reviewMenuId = 'primary-review-menu';
+        const renderReviewMenu = (
+            <Menu
+                anchorEl={this.state.anchorReviewEl}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                id={reviewMenuId}
+                keepMounted
+                transformOrigin={{vertical: 'top', horizontal: 'right'}}
+                open={this.state.isReviewMenuOpen}
+                onClose={this.handleReviewMenuClose}
+            >
+                <LinkMenuItems items={reviewMenuItems}/>
             </Menu>
         );
 
@@ -146,6 +179,18 @@ class Header extends React.Component {
                     </IconButton>
                     <p>Conta da Loja</p>
                 </MenuItem>
+
+                <MenuItem onClick={this.handleReviewMenuOpen}>
+                    <IconButton
+                        aria-label="store account"
+                        aria-controls="primary-search-account-menu"
+                        aria-haspopup="true"
+                        color="inherit"
+                    >
+                        <DescriptionIcon/>
+                    </IconButton>
+                    <p>Reviews</p>
+                </MenuItem>
             </Menu>
         );
 
@@ -185,6 +230,16 @@ class Header extends React.Component {
                                 aria-label="account of current user"
                                 aria-controls={profileMenuId}
                                 aria-haspopup="true"
+                                onClick={this.handleReviewMenuOpen}
+                                color="inherit"
+                            >
+                                <DescriptionIcon/>
+                            </IconButton>
+                            <IconButton
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={profileMenuId}
+                                aria-haspopup="true"
                                 onClick={this.handleProfileMenuOpen}
                                 color="inherit"
                             >
@@ -217,6 +272,7 @@ class Header extends React.Component {
                 {renderMobileMenu}
                 {renderProfileMenu}
                 {renderStoreMenu}
+                {renderReviewMenu}
             </div>
         );
     }
